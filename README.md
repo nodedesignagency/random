@@ -22,7 +22,7 @@ The sheet is dark night glass with soft aurora lights drifting behind it. All te
 | Illustration | The moon floats and glows, stars twinkle and the bed breathes. Awake apps show buzzing notification badges that pop when tucked in, then "z"s drift up. |
 | App lineup (the loading indicator) | Each app sits in a ring that fills with moonlight. The current app gently pulses. When it's asleep it dims, a moon badge bounces in, and the line to the next app lights up. |
 | Title and subtitle | Words rise into place one by one. The subtitle says which app is getting sleepy. Every text change moves bottom to top only, never sideways. |
-| Stats | A glass box with "Apps asleep" (the count rolls up) and "Back online". |
+| Stats | A glass box with "Apps asleep" (the count rolls up) and "Back online", each with an icon on the left. Icons are placeholders: swap them in `WindDownSheet.swift`. |
 | Button | A "Tucking in…" pill with a spinning sparkle grows into a full-width glowing **Good night** button. The ✕ fades away at that point, so "Good night" is how you leave. |
 | Finish | A burst of star-dust confetti and a success haptic. |
 

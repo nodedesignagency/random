@@ -138,7 +138,7 @@ struct WindDownSheet: View {
 
     private var stats: some View {
         HStack(spacing: 0) {
-            statTile(label: "Apps asleep") {
+            statTile(icon: Image(systemName: "moon.zzz.fill"), label: "Apps asleep") {
                 HStack(spacing: 0) {
                     Text("\(model.tuckedCount)")
                         .contentTransition(.numericText(value: Double(model.tuckedCount)))
@@ -151,7 +151,7 @@ struct WindDownSheet: View {
                 .fill(.white.opacity(0.1))
                 .frame(width: 1, height: 34)
 
-            statTile(label: "Back online") {
+            statTile(icon: Image(systemName: "sunrise.fill"), label: "Back online") {
                 Text(model.wakeTime)
             }
         }
@@ -166,14 +166,30 @@ struct WindDownSheet: View {
         )
     }
 
-    private func statTile<Value: View>(label: String, @ViewBuilder value: () -> Value) -> some View {
-        VStack(spacing: 4) {
-            value()
-                .font(.system(size: 20, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-            Text(label)
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(.white.opacity(0.5))
+    /// One half of the stats box: icon on the left, value and label stacked beside it.
+    /// The icons are placeholder SF Symbols; to use your own, add them to Assets.xcassets and
+    /// pass `Image("YourIconName")` above.
+    private func statTile<Value: View>(
+        icon: Image,
+        label: String,
+        @ViewBuilder value: () -> Value
+    ) -> some View {
+        HStack(spacing: 10) {
+            icon
+                .resizable()
+                .scaledToFit()
+                .symbolRenderingMode(.hierarchical)
+                .foregroundStyle(.white.opacity(0.85))
+                .frame(width: 26, height: 26)
+
+            VStack(alignment: .leading, spacing: 4) {
+                value()
+                    .font(.system(size: 20, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                Text(label)
+                    .font(.system(size: 12, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
         }
         .frame(maxWidth: .infinity)
     }

@@ -14,22 +14,21 @@ Every view also has an Xcode Preview. `WindDownSheet.swift` previews the sheet o
 
 ## What moves
 
+The sheet is dark night glass with soft aurora lights drifting behind it. All text uses SF Pro Rounded.
+
 | Element | Motion |
 | --- | --- |
 | Sheet | Springs up from the bottom and frosts the screen behind it. Drag it down to dismiss (a flick works too). Pulling up meets rubber-band resistance. |
-| Background | A mesh gradient drifts slowly from warm moonlight to periwinkle dusk. |
-| Moon | Drops in with a spin, then floats and sways. A glow behind it pulses. |
-| Stars and sparkles | Pop in one after another, then twinkle, each on its own rhythm. |
-| Bed | Rises in, then breathes gently. |
-| Notification badges | Each awake app has a red badge that buzzes every few seconds. When the app is tucked in, its badge pops with a moonlight ring. |
-| "z"s | Drift up from each app once it's asleep. |
-| Progress bar | Fills with a spring and has a highlight that keeps sweeping across it. It glows when complete. |
-| Status | The spinner turns into a filled check mark. Each status message pushes the previous one out. |
-| Title | Words rise into place one by one with a blur. On completion they float away and the new title cascades in. |
-| Close button | Spins in and squishes when pressed. |
-| Haptics | A light tap for each app tucked in, and a success haptic at the end. |
+| Illustration | The moon floats and glows, stars twinkle and the bed breathes. Awake apps show buzzing notification badges that pop when tucked in, then "z"s drift up. |
+| App lineup (the loading indicator) | Each app sits in a ring that fills with moonlight. The current app gently pulses. When it's asleep it dims, a moon badge bounces in, and the line to the next app lights up. |
+| Title and subtitle | Words rise into place one by one. The subtitle says which app is getting sleepy. |
+| Stats | The "Apps asleep" count ticks up. |
+| Button | A "Tucking in…" pill with a spinning sparkle grows into a full-width glowing **Good night** button. |
+| Finish | A burst of star-dust confetti and a success haptic. |
 
 All looping motion pauses when **Reduce Motion** is on.
+
+The first version (light dusk sheet with a progress bar) is saved in `Saved/v1-dusk-sheet/`.
 
 ## Project layout
 

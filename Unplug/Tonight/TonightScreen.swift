@@ -17,13 +17,13 @@ struct TonightScreen: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 Text("TONIGHT")
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .tracking(2)
                     .foregroundStyle(.white.opacity(0.5))
                     .reveal(hasAppeared, delay: 0.05, y: 10)
 
                 Text("Time to\nwind down")
-                    .font(.system(size: 44, weight: .semibold, design: .serif))
+                    .font(.system(size: 44, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .padding(.top, 8)
                     .reveal(hasAppeared, delay: 0.12, y: 14)
@@ -64,10 +64,10 @@ struct TonightScreen: View {
     private func scheduleItem(symbol: String, label: String, time: String) -> some View {
         VStack(spacing: 6) {
             Label(label, systemImage: symbol)
-                .font(.system(size: 13, weight: .medium))
+                .font(.system(size: 13, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.55))
             Text(time)
-                .font(.system(size: 26, weight: .semibold, design: .serif))
+                .font(.system(size: 26, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
         }
         .frame(maxWidth: .infinity)
@@ -76,7 +76,7 @@ struct TonightScreen: View {
     private var appsCard: some View {
         VStack(alignment: .leading, spacing: 14) {
             Text("Going to sleep")
-                .font(.system(size: 13, weight: .medium))
+                .font(.system(size: 13, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.55))
 
             HStack(spacing: 8) {
@@ -96,7 +96,7 @@ struct TonightScreen: View {
                 .fill(tint)
                 .frame(width: 7, height: 7)
             Text(name)
-                .font(.system(size: 15, weight: .medium))
+                .font(.system(size: 15, weight: .medium, design: .rounded))
                 .foregroundStyle(.white.opacity(0.9))
         }
         .padding(.horizontal, 12)
@@ -120,7 +120,7 @@ struct TonightScreen: View {
                     .symbolEffect(.pulse)
                 Text("Start wind down")
             }
-            .font(.system(size: 18, weight: .semibold))
+            .font(.system(size: 18, weight: .semibold, design: .rounded))
             .foregroundStyle(Palette.ink)
             .frame(maxWidth: .infinity)
             .frame(height: 60)

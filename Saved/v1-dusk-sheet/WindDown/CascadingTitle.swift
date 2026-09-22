@@ -8,13 +8,12 @@ enum RevealPhase: Equatable {
     case after
 }
 
-/// A rounded headline whose words rise into place one after another, and float away the same way.
+/// A serif headline whose words rise into place one after another, and float away the same way.
 struct CascadingTitle: View {
     let lines: [String]
     let phase: RevealPhase
     var delay: Double = 0
-    var fontSize: CGFloat = 28
-    var color: Color = .white
+    var fontSize: CGFloat = 32
 
     private struct Word: Identifiable {
         let id: Int
@@ -45,8 +44,8 @@ struct CascadingTitle: View {
                 }
             }
         }
-        .font(.system(size: fontSize, weight: .bold, design: .rounded))
-        .foregroundStyle(color)
+        .font(.system(size: fontSize, weight: .semibold, design: .serif))
+        .foregroundStyle(Palette.ink)
         .fixedSize()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(lines.joined(separator: " "))

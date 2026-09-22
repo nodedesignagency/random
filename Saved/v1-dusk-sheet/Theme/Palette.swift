@@ -33,15 +33,8 @@ enum Palette {
     static let periwinkleLight = Color(hex: 0xC9CDF1)
     static let periwinkleDeep = Color(hex: 0xAEB7E7)
 
-    // Glass sheet
-    static let glassTop = Color(hex: 0x2C3175)
-    static let glassBottom = Color(hex: 0x14163A)
-    static let aurora = Color(hex: 0x7B6CF6)
-    static let auroraPink = Color(hex: 0xE58BD8)
-    static let mist = Color(hex: 0xC9CCFF)
-
     // Illustration accents
-    static let dream = Color(hex: 0xC9CCFF)
+    static let dream = Color(hex: 0x7C84CC)
     static let badge = Color(hex: 0xFF4D5E)
 
     // Night sky behind the sheet

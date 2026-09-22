@@ -2,75 +2,97 @@ import SwiftUI
 
 /// Bottom sheet shown while the app puts distracting apps "to bed" for the night.
 ///
-/// Layout follows the reference (close button, illustration, progress, status, serif title);
-/// every element enters with its own staggered spring and keeps gently moving while it waits.
+/// Dark night glass: header, the animated bed illustration, a rounded title, the app lineup
+/// (which doubles as the loading indicator), a stats strip and a button that turns into
+/// "Good night" once everything is asleep, celebrated with a burst of star dust.
 struct WindDownSheet: View {
     let onClose: () -> Void
 
     @State private var model = WindDownModel()
     @State private var hasAppeared = false
+    @State private var burstStart: Date?
 
     init(onClose: @escaping () -> Void) {
         self.onClose = onClose
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            SleepIllustration(apps: model.apps, asleepCount: model.tuckedCount, isVisible: hasAppeared)
-                .frame(height: 280)
-                .padding(.top, 48)
-
-            SleepProgressBar(progress: model.progress, isComplete: model.isComplete)
-                .frame(width: 200, height: 8)
-                .padding(.top, 26)
-                .reveal(hasAppeared, delay: 0.32, scale: 0.7, y: 10)
-
-            statusRow
-                .padding(.top, 30)
-                .reveal(hasAppeared, delay: 0.4, y: 12)
-
-            title
-                .padding(.top, 12)
-                .padding(.horizontal, 24)
+        // Shrinks the illustration on short screens so the whole sheet always fits.
+        ViewThatFits(in: .vertical) {
+            content(illustrationHeight: 220)
+            content(illustrationHeight: 150)
         }
-        .padding(.bottom, 44)
         .frame(maxWidth: .infinity)
-        .overlay(alignment: .topTrailing) {
-            CloseButton(action: onClose)
-                .reveal(hasAppeared, delay: 0.5, scale: 0.4, rotation: -90)
-                .padding(16)
-        }
-        .background { DuskBackground() }
+        .background { NightGlassBackground() }
+        .overlay { StarBurst(start: burstStart) }
         .onAppear { hasAppeared = true }
         .task { await model.run() }
+        .onChange(of: model.isComplete) { _, isComplete in
+            if isComplete { burstStart = .now }
+        }
         .sensoryFeedback(.impact(weight: .light, intensity: 0.8), trigger: model.tuckedCount)
         .sensoryFeedback(.success, trigger: model.isComplete) { _, isComplete in isComplete }
     }
 
-    // MARK: Status
+    private func content(illustrationHeight: CGFloat) -> some View {
+        VStack(spacing: 0) {
+            header
+                .padding(.horizontal, 18)
+                .padding(.top, 18)
 
-    private var statusRow: some View {
-        HStack(spacing: 10) {
-            StatusIndicator(isComplete: model.isComplete)
-                .frame(width: 20, height: 20)
+            SleepIllustration(apps: model.apps, asleepCount: model.tuckedCount, isVisible: hasAppeared)
+                .frame(height: illustrationHeight)
 
-            // Each new message pushes the previous one up and out.
-            ZStack {
-                Text(statusText)
-                    .font(.system(size: 17, weight: .medium))
-                    .foregroundStyle(Palette.inkSoft)
-                    .id(statusText)
-                    .transition(.push(from: .bottom))
-            }
+            title
+                .padding(.top, 10)
+
+            subtitle
+                .padding(.top, 6)
+                .reveal(hasAppeared, delay: 0.4, y: 10)
+
+            AppLineup(
+                apps: model.apps,
+                tuckedCount: model.tuckedCount,
+                progress: model.progress,
+                isVisible: hasAppeared
+            )
+            .padding(.top, 22)
+
+            stats
+                .padding(.top, 20)
+                .padding(.horizontal, 20)
+                .reveal(hasAppeared, delay: 0.7, scale: 0.95, y: 14)
+
+            SleepActionButton(isComplete: model.isComplete, action: onClose)
+                .padding(.top, 20)
+                .padding(.horizontal, 20)
+                .reveal(hasAppeared, delay: 0.8, scale: 0.8, y: 16)
         }
-        .accessibilityElement(children: .combine)
+        .padding(.bottom, 26)
     }
 
-    private var statusText: String {
-        if let app = model.currentApp {
-            return "Tucking in \(app.name)…"
+    // MARK: Header
+
+    private var header: some View {
+        HStack {
+            CloseButton(action: onClose)
+                .reveal(hasAppeared, delay: 0.3, scale: 0.4, rotation: -90)
+
+            Spacer()
+
+            HStack(spacing: 6) {
+                Image(systemName: "moon.fill")
+                    .foregroundStyle(Palette.moon)
+                Text("10:30 PM – \(model.wakeTime)")
+                    .foregroundStyle(.white.opacity(0.8))
+            }
+            .font(.system(size: 13, weight: .semibold, design: .rounded))
+            .padding(.horizontal, 12)
+            .frame(height: 32)
+            .background(Capsule().fill(.white.opacity(0.08)))
+            .overlay(Capsule().stroke(.white.opacity(0.12), lineWidth: 1))
+            .reveal(hasAppeared, delay: 0.35, scale: 0.7)
         }
-        return "\(model.apps.count) apps asleep until \(model.wakeTime)"
     }
 
     // MARK: Title
@@ -78,17 +100,78 @@ struct WindDownSheet: View {
     private var title: some View {
         ZStack {
             CascadingTitle(
-                lines: ["Putting your apps", "to bed"],
+                lines: ["Tucking in your apps"],
                 phase: !hasAppeared ? .before : (model.isComplete ? .after : .shown),
-                delay: 0.45
+                delay: 0.3
             )
 
             CascadingTitle(
-                lines: ["Sweet dreams.", "See you at \(model.wakeTimeShort)"],
+                lines: ["Sweet dreams"],
                 phase: model.isComplete ? .shown : .before,
-                delay: 0.3
+                delay: 0.25
             )
         }
+    }
+
+    private var subtitle: some View {
+        ZStack {
+            Text(subtitleText)
+                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.6))
+                .id(subtitleText)
+                .transition(.push(from: .bottom))
+        }
+    }
+
+    private var subtitleText: String {
+        if let app = model.currentApp {
+            return "\(app.name) is getting sleepy…"
+        }
+        return "Phones down, lights out. See you at \(model.wakeTime)."
+    }
+
+    // MARK: Stats
+
+    private var stats: some View {
+        HStack(spacing: 0) {
+            statTile(label: "Apps asleep") {
+                HStack(spacing: 0) {
+                    Text("\(model.tuckedCount)")
+                        .contentTransition(.numericText(value: Double(model.tuckedCount)))
+                    Text(" of \(model.apps.count)")
+                        .foregroundStyle(.white.opacity(0.45))
+                }
+            }
+
+            Rectangle()
+                .fill(.white.opacity(0.1))
+                .frame(width: 1, height: 34)
+
+            statTile(label: "Back online") {
+                Text(model.wakeTime)
+            }
+        }
+        .padding(.vertical, 14)
+        .background(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(.white.opacity(0.06))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(.white.opacity(0.09), lineWidth: 1)
+        )
+    }
+
+    private func statTile<Value: View>(label: String, @ViewBuilder value: () -> Value) -> some View {
+        VStack(spacing: 4) {
+            value()
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+            Text(label)
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

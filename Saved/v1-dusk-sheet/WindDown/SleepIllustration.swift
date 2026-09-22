@@ -274,5 +274,5 @@ private extension AnyTransition {
     )
     .frame(height: 300)
     .padding()
-    .background(NightGlassBackground())
+    .background(DuskBackground())
 }

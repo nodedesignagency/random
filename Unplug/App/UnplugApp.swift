@@ -6,6 +6,7 @@ struct UnplugApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)
+                .fontDesign(.rounded)
         }
     }
 }

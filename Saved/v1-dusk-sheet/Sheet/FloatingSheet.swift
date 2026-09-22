@@ -79,15 +79,7 @@ private struct FloatingSheetModifier<SheetContent: View>: ViewModifier {
             .frame(maxWidth: 460)
             .clipShape(shape)
             .overlay {
-                // Glass edge: bright where the light hits the top, fading towards the bottom.
-                shape.stroke(
-                    LinearGradient(
-                        colors: [Color.white.opacity(0.35), Color.white.opacity(0.05)],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: 1
-                )
+                shape.stroke(Color.white.opacity(0.65), lineWidth: 1)
             }
             .compositingGroup()
             .shadow(color: Color.black.opacity(0.3), radius: 40, y: 18)

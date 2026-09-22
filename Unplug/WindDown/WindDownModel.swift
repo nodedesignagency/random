@@ -23,8 +23,6 @@ final class WindDownModel {
     ]
     let wakeTime = "7:00 AM"
     let wakeTimeShort = "7 AM"
-    /// Length of the lock, 10:30 PM to 7:00 AM.
-    let screenFreeTime = "8h 30m"
 
     private(set) var tuckedCount = 0
     private(set) var progress: Double = 0

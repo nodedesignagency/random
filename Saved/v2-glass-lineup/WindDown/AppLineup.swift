@@ -84,7 +84,7 @@ struct AppLineup: View {
                     .font(.system(size: 12, weight: .semibold, design: .rounded))
                     .foregroundStyle(isAsleep ? Palette.moon : Color.white.opacity(0.6))
                     .id(isAsleep)
-                    .transition(.rise)
+                    .transition(.push(from: .bottom))
             }
             .frame(height: 16)
         }

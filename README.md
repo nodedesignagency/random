@@ -21,14 +21,16 @@ The sheet is dark night glass with soft aurora lights drifting behind it. All te
 | Sheet | Springs up from the bottom and frosts the screen behind it. Drag it down to dismiss (a flick works too). Pulling up meets rubber-band resistance. |
 | Illustration | The moon floats and glows, stars twinkle and the bed breathes. Awake apps show buzzing notification badges that pop when tucked in, then "z"s drift up. |
 | App lineup (the loading indicator) | Each app sits in a ring that fills with moonlight. The current app gently pulses. When it's asleep it dims, a moon badge bounces in, and the line to the next app lights up. |
-| Title and subtitle | Words rise into place one by one. The subtitle says which app is getting sleepy. |
-| Stats | The "Apps asleep" count ticks up. |
+| Title and subtitle | Words rise into place one by one. The subtitle says which app is getting sleepy. Every text change moves bottom to top only, never sideways. |
+| Stats | Three columns (Asleep, Back online, Screen-free), each with its icon on the left. The "Asleep" count rolls up. Icons are placeholders: swap them in `WindDownSheet.swift`. |
 | Button | A "Tucking in…" pill with a spinning sparkle grows into a full-width glowing **Good night** button. |
 | Finish | A burst of star-dust confetti and a success haptic. |
 
 All looping motion pauses when **Reduce Motion** is on.
 
-The first version (light dusk sheet with a progress bar) is saved in `Saved/v1-dusk-sheet/`.
+Earlier versions are saved in `Saved/`:
+- `v1-dusk-sheet`: light dusk sheet with a progress bar and serif title
+- `v2-glass-lineup`: first glass version with the boxed two-column stats
 
 ## Project layout
 

@@ -60,7 +60,7 @@ struct WindDownSheet: View {
 
             stats
                 .padding(.top, 20)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 20)
                 .reveal(hasAppeared, delay: 0.7, scale: 0.95, y: 14)
 
             SleepActionButton(isComplete: model.isComplete, action: onClose)
@@ -114,10 +114,13 @@ struct WindDownSheet: View {
     }
 
     private var subtitle: some View {
-        RisingText(text: subtitleText)
-            .font(.system(size: 15, weight: .medium, design: .rounded))
-            .foregroundStyle(.white.opacity(0.6))
-            .padding(.horizontal, 20)
+        ZStack {
+            Text(subtitleText)
+                .font(.system(size: 15, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.6))
+                .id(subtitleText)
+                .transition(.push(from: .bottom))
+        }
     }
 
     private var subtitleText: String {
@@ -130,23 +133,45 @@ struct WindDownSheet: View {
     // MARK: Stats
 
     private var stats: some View {
-        StatsRow(items: [
-            StatItem(
-                icon: Image(systemName: "moon.zzz.fill"),
-                value: "\(model.tuckedCount) of \(model.apps.count)",
-                label: "Asleep"
-            ),
-            StatItem(
-                icon: Image(systemName: "sunrise.fill"),
-                value: model.wakeTime,
-                label: "Back online"
-            ),
-            StatItem(
-                icon: Image(systemName: "hourglass"),
-                value: model.screenFreeTime,
-                label: "Screen-free"
-            ),
-        ])
+        HStack(spacing: 0) {
+            statTile(label: "Apps asleep") {
+                HStack(spacing: 0) {
+                    Text("\(model.tuckedCount)")
+                        .contentTransition(.numericText(value: Double(model.tuckedCount)))
+                    Text(" of \(model.apps.count)")
+                        .foregroundStyle(.white.opacity(0.45))
+                }
+            }
+
+            Rectangle()
+                .fill(.white.opacity(0.1))
+                .frame(width: 1, height: 34)
+
+            statTile(label: "Back online") {
+                Text(model.wakeTime)
+            }
+        }
+        .padding(.vertical, 14)
+        .background(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .fill(.white.opacity(0.06))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(.white.opacity(0.09), lineWidth: 1)
+        )
+    }
+
+    private func statTile<Value: View>(label: String, @ViewBuilder value: () -> Value) -> some View {
+        VStack(spacing: 4) {
+            value()
+                .font(.system(size: 20, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+            Text(label)
+                .font(.system(size: 12, weight: .medium, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 

@@ -15,18 +15,23 @@ struct SleepActionButton: View {
 
     var body: some View {
         Button(action: action) {
-            // Both labels are always laid out on top of each other, so the button's content
-            // never changes width mid-swap; one rises out as the other rises in.
-            ZStack {
-                label(icon: AnyView(spinner), text: "Tucking in…")
-                    .offset(y: isComplete ? -14 : 0)
-                    .opacity(isComplete ? 0 : 1)
-                    .blur(radius: isComplete ? 5 : 0)
+            HStack(spacing: 9) {
+                ZStack {
+                    spinner
+                        .opacity(isComplete ? 0 : 1)
+                        .scaleEffect(isComplete ? 0.3 : 1)
+                    Image(systemName: "moon.stars.fill")
+                        .opacity(isComplete ? 1 : 0)
+                        .scaleEffect(isComplete ? 1 : 0.3)
+                        .rotationEffect(.degrees(isComplete ? 0 : -60))
+                }
+                .frame(width: 20, height: 20)
 
-                label(icon: AnyView(Image(systemName: "moon.stars.fill")), text: "Good night")
-                    .offset(y: isComplete ? 0 : 14)
-                    .opacity(isComplete ? 1 : 0)
-                    .blur(radius: isComplete ? 0 : 5)
+                ZStack {
+                    Text(isComplete ? "Good night" : "Tucking in…")
+                        .id(isComplete)
+                        .transition(.push(from: .bottom))
+                }
             }
             .font(.system(size: 17, weight: .semibold, design: .rounded))
             .foregroundStyle(isComplete ? Palette.ink : Color.white)
@@ -58,14 +63,6 @@ struct SleepActionButton: View {
         .disabled(!isComplete)
         .animation(.spring(duration: 0.65, bounce: 0.3), value: isComplete)
         .accessibilityLabel(isComplete ? "Good night" : "Tucking in apps")
-    }
-
-    private func label(icon: AnyView, text: String) -> some View {
-        HStack(spacing: 9) {
-            icon
-                .frame(width: 20, height: 20)
-            Text(text)
-        }
     }
 
     private var spinner: some View {

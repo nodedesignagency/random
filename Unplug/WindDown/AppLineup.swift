@@ -130,53 +130,30 @@ private struct Breathing: ViewModifier {
     }
 }
 
-/// Simple stand-ins for each app's icon, drawn with SF Symbols.
+/// Each app's logo, clipped to the same rounded-square shape so the row looks consistent.
+/// The logos live in Assets.xcassets (LogoInstagram, LogoTikTok, LogoX); the originals are in
+/// `Design/AppIcons/`.
 struct AppGlyph: View {
     let app: SleepyApp
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(background)
-
-            switch app.name {
-            case "Instagram":
-                Image(systemName: "camera")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(.white)
-            case "TikTok":
-                ZStack {
-                    note.foregroundStyle(Color(hex: 0x25F4EE)).offset(x: -1.2, y: -1.2)
-                    note.foregroundStyle(Color(hex: 0xFE2C55)).offset(x: 1.2, y: 1.2)
-                    note.foregroundStyle(.white)
-                }
-            default:
-                Text("𝕏")
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundStyle(.white)
-            }
-        }
+        Image(logoName)
+            .resizable()
+            .scaledToFit()
+            // TikTok's logo is a circle on black; the black tile behind it makes it read as a square.
+            .background(Color.black)
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+            )
     }
 
-    private var note: some View {
-        Image(systemName: "music.note")
-            .font(.system(size: 17, weight: .bold))
-    }
-
-    private var background: LinearGradient {
+    private var logoName: String {
         switch app.name {
-        case "Instagram":
-            LinearGradient(
-                colors: [Color(hex: 0xFEDA75), Color(hex: 0xFA7E1E), Color(hex: 0xD62976), Color(hex: 0x962FBF)],
-                startPoint: .bottomLeading,
-                endPoint: .topTrailing
-            )
-        default:
-            LinearGradient(
-                colors: [Color(hex: 0x2A2A2E), Color(hex: 0x0E0E10)],
-                startPoint: .top,
-                endPoint: .bottom
-            )
+        case "Instagram": "LogoInstagram"
+        case "TikTok": "LogoTikTok"
+        default: "LogoX"
         }
     }
 }
